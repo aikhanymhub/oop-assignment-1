@@ -7,7 +7,6 @@ public class Main {
         RentService rentService = new RentService();
         Scanner scanner = new Scanner(System.in);
 
-        // Adding vehicles
         rentService.addVehicle(new Car(1, "Toyota", "Camry"));
         rentService.addVehicle(new Car(2, "BMW", "X5"));
         rentService.addVehicle(new Car(3, "Hyundai", "Elantra"));

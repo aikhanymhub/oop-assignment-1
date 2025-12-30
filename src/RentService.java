@@ -8,7 +8,6 @@ public class RentService {
         vehicles = new ArrayList<>();
     }
 
-    // Add vehicle with duplicate check
     public void addVehicle(Vehicle vehicle) {
         if (findVehicleById(vehicle.getId()) != null) {
             System.out.println("Vehicle with this ID already exists.");
@@ -18,7 +17,6 @@ public class RentService {
         System.out.println("Vehicle added successfully.");
     }
 
-    // Show all vehicles
     public void showAllVehicles() {
         if (vehicles.isEmpty()) {
             System.out.println("No vehicles available.");
@@ -29,7 +27,6 @@ public class RentService {
         }
     }
 
-    // Search by ID
     public Vehicle findVehicleById(int id) {
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getId() == id) return vehicle;
@@ -37,7 +34,6 @@ public class RentService {
         return null;
     }
 
-    // Show available vehicles
     public void showAvailableVehicles() {
         boolean found = false;
         for (Vehicle vehicle : vehicles) {
@@ -49,7 +45,6 @@ public class RentService {
         if (!found) System.out.println("No available vehicles.");
     }
 
-    // Sort by ID
     public void sortVehiclesById() {
         if (vehicles.isEmpty()) {
             System.out.println("No vehicles to sort.");
@@ -59,7 +54,6 @@ public class RentService {
         System.out.println("Vehicles sorted by ID.");
     }
 
-    // Rent a vehicle by ID
     public void rentVehicle(int id) {
         Vehicle vehicle = findVehicleById(id);
         if (vehicle == null) {
@@ -74,7 +68,6 @@ public class RentService {
         }
     }
 
-    // Return a vehicle by ID
     public void returnVehicle(int id) {
         Vehicle vehicle = findVehicleById(id);
         if (vehicle == null) {
