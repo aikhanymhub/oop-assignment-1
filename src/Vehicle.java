@@ -1,13 +1,13 @@
 public abstract class Vehicle {
 
     protected int id;
-    protected String brand;
+    protected String Brand;
     protected String model;
     protected boolean isRented;
 
     public Vehicle(int id, String brand, String model) {
         this.id = id;
-        this.brand = brand;
+        this.Brand = brand;
         this.model = model;
         this.isRented = false;
     }
@@ -21,7 +21,7 @@ public abstract class Vehicle {
     }
 
     public String getBrand() {
-        return brand;
+        return Brand;
     }
 
     public String getModel() {
@@ -41,7 +41,7 @@ public abstract class Vehicle {
     public void showInfo() {
         System.out.println("Type: " + getType());
         System.out.println("ID: " + id);
-        System.out.println("Brand: " + brand);
+        System.out.println("Brand: " + Brand);
         System.out.println("Model: " + model);
         System.out.println("Rented: " + isRented);
         System.out.println("---------------------");

@@ -19,7 +19,7 @@ public class RentService {
 
     public void showAllVehicles() {
         if (vehicles.isEmpty()) {
-            System.out.println("No vehicles available.");
+            System.out.println("NO vehicles available.");
             return;
         }
         for (Vehicle vehicle : vehicles) {
