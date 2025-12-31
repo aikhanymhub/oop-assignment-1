@@ -18,6 +18,7 @@ public class Main {
             System.out.println("3. Rent vehicle");
             System.out.println("4. Return vehicle");
             System.out.println("5. Sort vehicles by ID");
+            System.out.println("6. Filter vehicles by brand");
             System.out.println("0. Exit");
             System.out.print("Choose option: ");
 
@@ -40,6 +41,11 @@ public class Main {
                     break;
                 case 5:
                     rentService.sortVehiclesById();
+                    break;
+                case 6:
+                    System.out.print("Enter brand: ");
+                    String brand = scanner.next();
+                    rentService.filterByBrand(brand);
                     break;
                 case 0:
                     System.out.println("Goodbye!");

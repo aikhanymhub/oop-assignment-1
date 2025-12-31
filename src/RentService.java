@@ -81,4 +81,18 @@ public class RentService {
             System.out.println("Vehicle was not rented.");
         }
     }
+    public void filterByBrand(String brand) {
+        boolean found = false;
+
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getBrand().equalsIgnoreCase(brand)) {
+                vehicle.showInfo();
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("No vehicles found with this brand.");
+        }
+    }
 }
