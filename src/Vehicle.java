@@ -5,9 +5,9 @@ public abstract class Vehicle {
     protected String model;
     protected boolean isRented;
 
-    public Vehicle(int id, String brand, String model) {
+    public Vehicle(int id, String Brand, String model) {
         this.id = id;
-        this.Brand = brand;
+        this.Brand = Brand;
         this.model = model;
         this.isRented = false;
     }
@@ -45,5 +45,23 @@ public abstract class Vehicle {
         System.out.println("Model: " + model);
         System.out.println("Rented: " + isRented);
         System.out.println("---------------------");
+    }
+
+    @Override
+    public String toString() {
+        return getType() + "{id=" + id + ", Brand='" + Brand + "', model='" + model + "', rented=" + isRented + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Vehicle)) return false;
+        Vehicle other = (Vehicle) obj;
+        return id == other.id; // считаем, что ID уникальный
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 }
