@@ -1,98 +1,129 @@
+import java.sql.*;
 import java.util.ArrayList;
 
 public class RentService {
 
-    private ArrayList<Vehicle> vehicles;
-
     public RentService() {
-        vehicles = new ArrayList<>();
     }
 
     public void addVehicle(Vehicle vehicle) {
-        if (findVehicleById(vehicle.getId()) != null) {
-            System.out.println("Vehicle with this ID already exists.");
-            return;
+        String sql = "INSERT INTO vehicles (id, brand, model, is_rented, type) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, vehicle.getId());
+            pstmt.setString(2, vehicle.getBrand());
+            pstmt.setString(3, vehicle.getModel());
+            pstmt.setBoolean(4, vehicle.isRented());
+            pstmt.setString(5, vehicle.getType());
+
+            pstmt.executeUpdate();
+            System.out.println("Vehicle added to database successfully.");
+        } catch (SQLException e) {
+            System.out.println("Error adding vehicle: " + e.getMessage());
         }
-        vehicles.add(vehicle);
-        System.out.println("Vehicle added successfully.");
     }
 
     public void showAllVehicles() {
-        if (vehicles.isEmpty()) {
-            System.out.println("NO vehicles available.");
-            return;
-        }
-        for (Vehicle vehicle : vehicles) {
-            vehicle.showInfo();
-        }
-    }
+        String sql = "SELECT * FROM vehicles";
 
-    public Vehicle findVehicleById(int id) {
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getId() == id) return vehicle;
-        }
-        return null;
-    }
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-    public void showAvailableVehicles() {
-        boolean found = false;
-        for (Vehicle vehicle : vehicles) {
-            if (!vehicle.isRented()) {
-                vehicle.showInfo();
-                found = true;
+            System.out.println("\n--- All Vehicles from Database ---");
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") +
+                        " | Brand: " + rs.getString("brand") +
+                        " | Model: " + rs.getString("model") +
+                        " | Rented: " + rs.getBoolean("is_rented"));
             }
+        } catch (SQLException e) {
+            System.out.println("Error showing vehicles: " + e.getMessage());
         }
-        if (!found) System.out.println("No available vehicles.");
-    }
-
-    public void sortVehiclesById() {
-        if (vehicles.isEmpty()) {
-            System.out.println("No vehicles to sort.");
-            return;
-        }
-        vehicles.sort((v1, v2) -> Integer.compare(v1.getId(), v2.getId()));
-        System.out.println("Vehicles sorted by ID.");
     }
 
     public void rentVehicle(int id) {
-        Vehicle vehicle = findVehicleById(id);
-        if (vehicle == null) {
-            System.out.println("Vehicle not found.");
-            return;
-        }
-        if (!vehicle.isRented()) {
-            vehicle.rent();
-            System.out.println("Vehicle rented successfully.");
-        } else {
-            System.out.println("Vehicle is already rented.");
-        }
-    }
+        String sql = "UPDATE vehicles SET is_rented = true WHERE id = ? AND is_rented = false";
 
-    public void returnVehicle(int id) {
-        Vehicle vehicle = findVehicleById(id);
-        if (vehicle == null) {
-            System.out.println("Vehicle not found.");
-            return;
-        }
-        if (vehicle.isRented()) {
-            vehicle.giveBack();
-            System.out.println("Vehicle returned successfully.");
-        } else {
-            System.out.println("Vehicle was not rented.");
-        }
-    }
-    public void filterByBrand(String brand) {
-        boolean found = false;
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        for (Vehicle vehicle : vehicles) {
-            if (vehicle.getBrand().equalsIgnoreCase(brand)) {
-                vehicle.showInfo();
-                found = true;
+            pstmt.setInt(1, id);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Vehicle rented successfully!");
+            } else {
+                System.out.println("Vehicle not found or already rented.");
             }
+        } catch (SQLException e) {
+            System.out.println("Error renting vehicle: " + e.getMessage());
         }
+    }
 
-        if (!found) {
-            System.out.println("No vehicles found with this brand.");
+    public void deleteVehicle(int id) {
+        String sql = "DELETE FROM vehicles WHERE id = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            System.out.println("Vehicle deleted from database.");
+        } catch (SQLException e) {
+            System.out.println("Error deleting vehicle: " + e.getMessage());
         }
+    }
+    // 1. Показать доступные машины
+    public void showAvailableVehicles() {
+        String sql = "SELECT * FROM vehicles WHERE is_rented = false";
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            System.out.println("\n--- Available Vehicles ---");
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + " | Brand: " + rs.getString("brand") + " | Model: " + rs.getString("model"));
+            }
+        } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
+    }
+
+    // 2. Вернуть машину (Update)
+    public void returnVehicle(int id) {
+        String sql = "UPDATE vehicles SET is_rented = false WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+            System.out.println("Vehicle returned successfully.");
+        } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
+    }
+
+    // 3. Сортировка (Order By)
+    public void sortVehiclesById() {
+        String sql = "SELECT * FROM vehicles ORDER BY id ASC";
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            System.out.println("\n--- Sorted Vehicles ---");
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + " | " + rs.getString("brand"));
+            }
+        } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
+    }
+
+    // 4. Фильтр по бренду (Where)
+    public void filterByBrand(String brand) {
+        String sql = "SELECT * FROM vehicles WHERE brand ILIKE ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, brand);
+            ResultSet rs = pstmt.executeQuery();
+            System.out.println("\n--- Filtered by Brand: " + brand + " ---");
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + " | " + rs.getString("model"));
+            }
+        } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
     }
 }
