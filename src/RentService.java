@@ -76,7 +76,7 @@ public class RentService {
             System.out.println("Error deleting vehicle: " + e.getMessage());
         }
     }
-    // 1. Показать доступные машины
+
     public void showAvailableVehicles() {
         String sql = "SELECT * FROM vehicles WHERE is_rented = false";
         try (Connection conn = DatabaseManager.getConnection();
@@ -89,7 +89,6 @@ public class RentService {
         } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
     }
 
-    // 2. Вернуть машину (Update)
     public void returnVehicle(int id) {
         String sql = "UPDATE vehicles SET is_rented = false WHERE id = ?";
         try (Connection conn = DatabaseManager.getConnection();
@@ -100,7 +99,6 @@ public class RentService {
         } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
     }
 
-    // 3. Сортировка (Order By)
     public void sortVehiclesById() {
         String sql = "SELECT * FROM vehicles ORDER BY id ASC";
         try (Connection conn = DatabaseManager.getConnection();
@@ -113,7 +111,6 @@ public class RentService {
         } catch (SQLException e) { System.out.println("Error: " + e.getMessage()); }
     }
 
-    // 4. Фильтр по бренду (Where)
     public void filterByBrand(String brand) {
         String sql = "SELECT * FROM vehicles WHERE brand ILIKE ?";
         try (Connection conn = DatabaseManager.getConnection();
