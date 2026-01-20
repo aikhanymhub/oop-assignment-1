@@ -5,11 +5,15 @@ public class Main {
     public static void main(String[] args) {
 
         RentService rentService = new RentService();
+
+
         Scanner scanner = new Scanner(System.in);
 
-       // rentService.addVehicle(new Car(1, "Toyota", "Camry"));
-        // rentService.addVehicle(new Car(2, "BMW", "X5"));
-        //rentService.addVehicle(new Car(3, "Hyundai", "ELantra"));
+        rentService.addVehicle(new Car(1, "Toyota", "Camry"));
+        rentService.addVehicle(new Car(2, "BMW", "X5"));
+        rentService.addVehicle(new Car(3, "Hyundai", "ELantra"));
+
+
 
         while (true) {
             System.out.println("\n--- Vehicle Rental System ---");
