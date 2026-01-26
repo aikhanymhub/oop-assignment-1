@@ -5,14 +5,12 @@ public class Main {
     public static void main(String[] args) {
 
         RentService rentService = new RentService();
-
-
         Scanner scanner = new Scanner(System.in);
+
 
         rentService.addVehicle(new Car(1, "Toyota", "Camry"));
         rentService.addVehicle(new Car(2, "BMW", "X5"));
-        rentService.addVehicle(new Car(3, "Hyundai", "ELantra"));
-
+        rentService.addVehicle(new Car(3, "Hyundai", "Elantra"));
 
 
         while (true) {
@@ -23,6 +21,7 @@ public class Main {
             System.out.println("4. Return vehicle");
             System.out.println("5. Sort vehicles by ID");
             System.out.println("6. Filter vehicles by brand");
+            System.out.println("7. Add vehicle");
             System.out.println("0. Exit");
             System.out.print("Choose option: ");
 
@@ -51,6 +50,28 @@ public class Main {
                     String brand = scanner.next();
                     rentService.filterByBrand(brand);
                     break;
+                case 7:
+                    System.out.print("Enter vehicle id: ");
+                    int id = scanner.nextInt();
+
+                    System.out.print("Enter brand: ");
+                    String newBrand = scanner.next();
+
+                    System.out.print("Enter model: ");
+                    String model = scanner.next();
+
+                    System.out.print("Enter price: ");
+                    int price = scanner.nextInt();
+
+                    Car car = new Car(id, newBrand, model);
+                    if (rentService.addVehicle(car)) {
+                        System.out.println("Vehicle added successfully!");
+                    } else {
+                        System.out.println("Vehicle NOT added.");
+                    }
+
+                    break;
+
                 case 0:
                     System.out.println("Goodbye!");
                     scanner.close();

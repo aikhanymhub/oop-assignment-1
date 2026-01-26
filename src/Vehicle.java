@@ -8,7 +8,7 @@ public abstract class Vehicle {
     public Vehicle(int id, String Brand, String model) {
         this.id = id;
         this.Brand = Brand;
-        this.model = model;
+         this.model = model;
         this.isRented = false;
     }
 

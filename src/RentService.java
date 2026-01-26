@@ -6,7 +6,7 @@ public class RentService {
     public RentService() {
     }
 
-    public void addVehicle(Vehicle vehicle) {
+    public boolean addVehicle(Vehicle vehicle) {
         String sql = "INSERT INTO vehicles (id, brand, model, is_rented, type) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseManager.getConnection();
@@ -18,10 +18,19 @@ public class RentService {
             pstmt.setBoolean(4, vehicle.isRented());
             pstmt.setString(5, vehicle.getType());
 
-            pstmt.executeUpdate();
-            System.out.println("Vehicle added to database successfully.");
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Vehicle added to database successfully.");
+                return true;
+            } else {
+                System.out.println("Vehicle was NOT added.");
+                return false;
+            }
+
         } catch (SQLException e) {
             System.out.println("Error adding vehicle: " + e.getMessage());
+            return false;
         }
     }
 
